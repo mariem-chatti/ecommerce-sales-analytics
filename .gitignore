@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+.ipynb_checkpoints/
+
+# Environment variables and secrets
+.env
+
+# Generated datasets
+data/raw
+data/processed/
+
+# Local database files
+mysql_data/
+
+# Operating system
+.DS_Store
+Thumbs.db
