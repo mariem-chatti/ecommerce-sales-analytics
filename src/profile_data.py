@@ -5,6 +5,11 @@ df = pd.read_csv("/app/data/raw/online_retail.csv")
 print("DATASET SHAPE")
 print(df.shape)
 
+print("\nFIRST FIVE ROWS")
+print(df.head())
+
+print('*'*20)
+
 print("\nCOLUMN DATA TYPES")
 print(df.dtypes)
 
@@ -14,8 +19,29 @@ print(df.isna().sum())
 print("\nDUPLICATE ROWS")
 print(df.duplicated().sum())
 
-print("\nFIRST FIVE ROWS")
-print(df.head())
+print('*'*20)
+
+print("\nFIRST TWENTY DUPLICATE ROWS")
+duplicates = df[df.duplicated(keep=False)]
+print(duplicates.sort_values(by=list(df.columns)).head(20))
+
+print('*'*20)
+
+
+# Estimate how many rows would remain after deduplication.
+# This does NOT modify the DataFrame.
+print("\nPOTENTIAL DUPLICATE REMOVAL")
+# Count rows before removing duplicates
+rows_before = len(df)
+print("Original rows:",rows_before)
+
+dup_num= df.duplicated().sum()
+print("Duplicate rows:", dup_num)
+
+# Count rows after removing duplicates
+rows_after =rows_before - dup_num
+print("Rows after deduplication:", rows_after)
+
 
 print('*'*20)
 
@@ -40,7 +66,7 @@ print(
     .head(10)
 )
 print('*'*20)
-print('how many negative-quantity rows have invoice numbers that do not begin with C')
+#print('how many negative-quantity rows have invoice numbers that do not begin with C')
 negative_qty = df["Quantity"] < 0
 cancelled_invoice = df["InvoiceNo"].astype(str).str.startswith("C")
 
@@ -68,3 +94,6 @@ print(
         ["InvoiceNo", "StockCode", "Description", "Quantity", "UnitPrice"]
     ].head(10).to_string(index=False)
 )
+
+
+print("\nDATA PROFILING COMPLETED")

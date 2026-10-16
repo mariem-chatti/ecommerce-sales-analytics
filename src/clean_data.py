@@ -12,6 +12,9 @@ df = pd.read_csv(
     }
 )
 
+original_count = len(df)
+print("ORIGINAL ROWS:", original_count)
+
 # Remove the unnecessary .0 suffix from CustomerID
 df["CustomerID"] = df["CustomerID"].str.replace(
     r"\.0$",
@@ -33,47 +36,25 @@ print(df.dtypes)
 print("\nTOTAL ROWS:", len(df))
 
 # 5. Display a few customer IDs
-print("\nCUSTOMER ID EXAMPLES")
-print(df["CustomerID"].head(10))
-
 print("\nCUSTOMER IDS AFTER CLEANING")
 print(df["CustomerID"].head(10))
 
 print("\nMISSING CUSTOMER IDS")
 print(df["CustomerID"].isna().sum())
 
+# 6. Remove exact duplicate rows, retaining the first occurrence.
+# Assumption: identical source rows are duplicates.
+duplicates_removed = int(df.duplicated().sum())
+
+df = df.drop_duplicates().copy()
+
+print("\nDUPLICATE REMOVAL")
+print("Rows before:", original_count)
+print("Rows removed:", duplicates_removed)
+print("Rows after:", len(df))
+
 # Identify cancellation invoices
 print('*'*40)
-
-# import numpy as np
-
-# # Identify cancellation invoices
-# is_cancelled = df["InvoiceNo"].str.startswith("C").fillna(False)
-
-# # Define transaction conditions
-# conditions = [
-#     is_cancelled,
-#     (df["Quantity"] < 0) & ~is_cancelled,
-#     (df["Quantity"] > 0) & (df["UnitPrice"] > 0),
-#     (df["Quantity"] > 0) & (df["UnitPrice"] == 0)
-# ]
-
-# # Labels corresponding to the conditions
-# choices = [
-#     "CANCELLATION",
-#     "ADJUSTMENT",
-#     "SALE",
-#     "ZERO_PRICE"
-# ]
-
-# df["TransactionType"] = np.select(
-#     conditions,
-#     choices,
-#     default="REVIEW"
-# )
-
-# print("\nTRANSACTION CLASSIFICATION")
-# print(df["TransactionType"].value_counts())
 
 def classify_transaction(row):
     invoice = row["InvoiceNo"]
@@ -110,13 +91,24 @@ print(review_rows.to_string(index=False))
 
 # Validate the cleaned dataset
 print('*'*40)
-assert len(df) == 541909, "Unexpected number of rows!"
+assert original_count == 541909, "Unexpected original row count!"
+
+assert duplicates_removed == 5268, "Unexpected duplicate count!"
+
+assert len(df) == 536641, "Unexpected cleaned row count!"
+
+assert not df.duplicated().any(), "Duplicates still exist!"
 
 assert df["InvoiceNo"].notna().all(), "Missing invoice numbers!"
 
 assert df["InvoiceDate"].notna().all(), "Missing invoice dates!"
 
-assert df["TransactionType"].ne("REVIEW").all(), "Unclassified transactions found!"
+assert df["TransactionType"].ne("REVIEW").all(), (
+    "Unclassified transactions found!"
+)
+assert len(df) + duplicates_removed == original_count, (
+    "Row count mismatch!"
+)
 
 print("\nAll validation checks passed!")
 
