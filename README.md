@@ -1,30 +1,23 @@
 # E-Commerce Sales Analytics
 
-## Project Overview
-
-An end-to-end data analytics project using historical e-commerce transactions to explore sales performance, customer behavior, and product trends.
-
-The project demonstrates a practical data analytics workflow, from raw data ingestion and cleaning to relational database design, SQL-based analysis, and eventually interactive business intelligence dashboards.
+An end-to-end data analytics project using the UCI Online Retail dataset. The project demonstrates a complete workflow, from data exploration and cleaning with Python to relational database storage, SQL business analysis, and interactive Power BI reporting.
 
 Python and MySQL run in separate Docker containers managed by Docker Compose.
 
-## Version 1 — Sales Analytics
+## Project Overview
 
-Version 1 focuses on:
+The objective is to explore historical e-commerce transactions and identify useful insights about sales performance, customer purchasing behavior, and product revenue.
 
-- Data ingestion, exploration, and cleaning using Python and Pandas
-- Relational data modeling and storage using MySQL
-- SQL-based business analysis
-- Exploratory data analysis and statistics
-- Customer segmentation
-- Interactive dashboards using Power BI
+The project covers:
 
-**Current progress:** Data cleaning, database creation, data loading,
-and the initial SQL business analytics are complete.
+- Data ingestion, exploration, and cleaning using Python and Pandas.
+- Relational database design and storage using MySQL.
+- Data loading with SQLAlchemy.
+- SQL-based business analysis.
+- Interactive business intelligence reporting using Power BI.
+- Containerized development using Docker Compose.
 
-Six SQL analyses have been implemented and validated against MySQL.
-The next phase is building an interactive Power BI dashboard.
-Customer segmentation and additional analytics are potential future extensions.
+**Current status:** The initial end-to-end analytics workflow is complete, including data cleaning, database creation, data loading, six SQL analyses, and an interactive Power BI dashboard.
 
 ## Dataset
 
@@ -32,7 +25,7 @@ Customer segmentation and additional analytics are potential future extensions.
 
 The dataset contains historical transactions from a UK-based online retailer between December 2010 and December 2011.
 
-The original dataset contains 541,909 records with the following columns:
+The original dataset contains 541,909 transaction records and the following columns:
 
 | Column | Description |
 |---|---|
@@ -56,61 +49,61 @@ The original dataset contains 541,909 records with the following columns:
 | Unique product identifiers | 4,070 |
 | Transactions with missing CustomerID | 135,037 |
 
-The cleaned dataset is saved as `data/processed/online_retail_cleaned.csv`.
+The cleaned dataset is saved as:
+
+`data/processed/online_retail_cleaned.csv`
 
 ## Technology Stack
 
-**Currently implemented:**
-
-- Python 3.11
-- Pandas and NumPy
-- MySQL 8.4
-- SQL and SQLAlchemy
-- PyMySQL
-- Docker and Docker Compose
-- Git and GitHub
-
-**Planned:**
-
-- Power BI for interactive dashboards
-- Additional statistical analysis and customer segmentation
+| Technology | Purpose |
+|---|---|
+| Python 3.11 | Data processing and pipeline development |
+| Pandas | Data exploration and cleaning |
+| NumPy | Numerical operations |
+| MySQL 8.4 | Relational database |
+| SQL | Business analysis |
+| SQLAlchemy | Python-to-MySQL connectivity |
+| PyMySQL | MySQL database driver |
+| Docker | Containerization |
+| Docker Compose | Multi-container environment |
+| Power BI Desktop | Interactive dashboards |
+| Git and GitHub | Version control and project hosting |
 
 ## Project Architecture
 
-The data pipeline follows this workflow:
+The project follows this workflow:
 
 ```text
 UCI Online Retail Dataset
-           |
-           v
-     Raw Dataset
-           |
-           v
-   Python + Pandas
-   Data Exploration
-   Data Cleaning
-   Classification
-           |
-           v
-   Cleaned CSV File
-           |
-           v
-   Python + SQLAlchemy
-           |
-           v
+          |
+          v
+      Raw Dataset
+          |
+          v
+    Python + Pandas
+    Data Exploration
+    Data Cleaning
+    Transaction Classification
+          |
+          v
+     Cleaned CSV File
+          |
+          v
+    Python + SQLAlchemy
+          |
+          v
        MySQL 8.4
-   -------------------
-   |    Customers    |
-   |    Products     |
-   |    Transactions |
-   -------------------
-           |
-           v
+    -------------------
+    |    Customers    |
+    |    Products     |
+    |    Transactions |
+    -------------------
+          |
+          v
       SQL Analytics
-           |
-           v
-   Power BI Dashboards
-        (Planned)
+          |
+          v
+    Power BI Dashboard
 ```
 
 Docker Compose manages the Python application and MySQL database as separate services.
@@ -287,7 +280,7 @@ data/processed/online_retail_cleaned.csv
 
 The SQL schema is stored in `sql/schema.sql`.
 
-With the MySQL service running, the schema can be executed using:
+With the MySQL service running, the schema can be executed using PowerShell:
 
 ```powershell
 Get-Content .\sql\schema.sql -Raw | docker compose exec -T mysql mysql -u analyst -p ecommerce
@@ -313,6 +306,8 @@ docker compose exec mysql mysql -u analyst -p ecommerce
 
 ### 8. Validate the Database
 
+Run:
+
 ```sql
 SELECT COUNT(*) FROM customers;
 SELECT COUNT(*) FROM products;
@@ -333,16 +328,16 @@ SQL business analysis is performed directly against the cleaned transaction data
 
 The queries are available in [`sql/sales_Analysis.sql`](sql/sales_Analysis.sql).
 
-Detailed results, methodology, interpretations, and limitations are documented in the [Sales Analysis Report](docs/sales_analysis.md).
+Detailed results, methodology, interpretations, and limitations are documented in [`docs/sales_analysis.md`](docs/sales_analysis.md).
 
 ### Completed Analyses
 
 | # | Analysis | Purpose |
 |---|---|---|
-| 1 | Gross Sales Revenue | Calculate total positive sales revenue |
+| 1 | Gross Sales Revenue | Calculate total gross sales revenue |
 | 2 | Monthly Sales Performance | Analyze revenue and invoice trends over time |
 | 3 | Average Invoice Value | Understand revenue growth relative to invoice volume |
-| 4 | Top 10 Products by Revenue | Identify the highest-revenue StockCodes |
+| 4 | Top 10 StockCodes by Revenue | Identify the highest-revenue StockCodes |
 | 5 | Revenue by Country | Compare sales performance by customer country |
 | 6 | Top 10 Customers | Identify customers contributing the most gross revenue |
 
@@ -375,50 +370,91 @@ Cancellations, adjustments, and other transaction types are excluded from these 
 
 Gross sales revenue should not be confused with net revenue or profit.
 
-The dataset contains incomplete reporting months at the beginning and end of the observation period.
+The dataset ends on December 9, 2011, making December 2011 an incomplete reporting month.
 
-For detailed findings, see [docs/sales_analysis.md](docs/sales_analysis.md).
+For detailed findings, see [`docs/sales_analysis.md`](docs/sales_analysis.md).
+
+## Power BI Dashboard
+
+An interactive Power BI dashboard was developed using the cleaned transaction data stored in MySQL.
+
+### Dashboard Components
+
+| Component | Purpose |
+|---|---|
+| Gross Sales Revenue | Display total gross sales revenue |
+| Average Invoice Value | Show average revenue per sales invoice |
+| Total Sales Invoices | Display the number of distinct sales invoices |
+| Monthly Revenue Trend | Explore changes in monthly gross revenue |
+| Revenue by Country | Compare revenue across customer countries |
+| Top 10 StockCodes | Identify the highest-revenue product identifiers |
+| Top 10 Customers | Identify the highest-revenue identified customers |
+
+### Interactive Filters
+
+The dashboard includes two slicers:
+
+- **Invoice Date:** Filter the reporting period.
+- **Country:** Explore sales performance for selected customer countries.
+
+The slicers allow users to explore different periods and customer markets. The visuals update dynamically based on the selected filters.
+
+### Dashboard Preview
+
+The following screenshots show the main dashboard and an example of the dashboard with filters applied.
+
+**Main Dashboard**
+
+![E-Commerce Sales Analytics Dashboard](images/sales_dashboard.png)
+
+**Dashboard with Filters Applied**
+
+![E-Commerce Sales Analytics Dashboard - Filtered View](images/sales_dashboard_Filter.png)
+
+### Interactive Power BI Report
+
+The complete Power BI report is included in the repository:
+
+[**Download the Power BI Dashboard (.pbix)**](dashboard/ecommerce_sales_dashboard.pbix)
+
+The `.pbix` file can be opened using Power BI Desktop to explore the interactive report.
+
+**Note:** The report was developed using a local MySQL database. To refresh the data, users may need to configure their own MySQL connection and credentials. The screenshots provide static previews without requiring a database connection.
 
 ## Project Status
 
-**Version 1 — In Development**
+**Version 1 — Sales Analytics: Initial workflow completed**
 
 ### Completed
 
-- Dataset exploration and cleaning
-- Duplicate removal and missing-value handling
-- Transaction classification
-- Dockerized Python and MySQL environment
-- Relational database schema
-- Data loading using SQLAlchemy
-- Database validation
-- Six SQL business analyses
-- Initial business insights and SQL documentation
-
-### Next Phase
-
-- Install Power BI Desktop
-- Connect Power BI to the MySQL database
-- Create interactive sales dashboards
-- Add dashboard screenshots to GitHub
-- Finalize project documentation
+- Dataset exploration and cleaning.
+- Duplicate removal and missing-value handling.
+- Transaction classification.
+- Dockerized Python and MySQL environment.
+- Relational database schema.
+- Data loading using SQLAlchemy.
+- Database validation.
+- Six SQL business analyses.
+- Initial business insights and SQL documentation.
+- Interactive Power BI dashboard.
+- Revenue, customer, and product visualizations.
+- Date and country slicers.
 
 ### Potential Future Improvements
 
-- Customer segmentation
-- Additional exploratory statistics
-- More detailed cancellation and return analysis
-- Refined merchandise-only product rankings
-
-Detailed SQL results are available in the [Sales Analysis Report](docs/sales_analysis.md).
+- Customer segmentation.
+- Additional exploratory statistics.
+- More detailed cancellation and return analysis.
+- Refined merchandise-only product rankings.
+- Additional data-quality validation.
 
 ## Future Extension — Version 2
 
-The project will later be extended with:
+The project may later be extended with:
 
-- Dimensional modeling
-- Data warehousing concepts
-- HDFS
-- Apache Hive
+- Dimensional modeling.
+- Data warehousing concepts.
+- HDFS.
+- Apache Hive.
 
 The goal of Version 2 is to explore how the analytical workflow can evolve from a relational database implementation toward a larger-scale data platform.

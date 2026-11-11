@@ -1,3 +1,4 @@
+
 # E-Commerce Sales Analysis Report
 
 ## 1. Overview
@@ -46,7 +47,7 @@ Cancellations, adjustments, zero-price transactions, and bad-debt records are ex
 
 | Metric | Value |
 |---|---:|
-| Gross sales revenue | **£10,642,110.80** |
+| Gross sales revenue | £10,642,110.80 |
 | SALE transaction lines | 524,878 |
 
 ### Business Insights
@@ -200,8 +201,6 @@ However, December is an incomplete reporting month, so this result should be int
 
 The average invoice value was £430.95.
 
-This suggests that sales invoices in April were smaller in monetary value on average than in other reported months.
-
 ### Business Interpretation
 
 Revenue growth does not necessarily mean that customers are spending more per purchase.
@@ -232,9 +231,9 @@ Transactions classified as `SALE` were grouped by `StockCode`.
 
 For each StockCode, the following metrics were calculated:
 
-- Gross sales revenue
-- Total units sold
-- Number of distinct invoices
+- Gross sales revenue.
+- Total units sold.
+- Number of distinct invoices.
 
 The results were sorted by gross revenue in descending order, and the top 10 were selected.
 
@@ -295,8 +294,8 @@ Transactions classified as `SALE` were grouped by `Country`.
 
 For each country, the analysis calculated:
 
-- Total gross sales revenue
-- Number of distinct sales invoices
+- Total gross sales revenue.
+- Number of distinct sales invoices.
 
 The countries were ranked by gross revenue.
 
@@ -357,8 +356,8 @@ Records with missing customer identifiers were excluded to avoid treating all un
 
 For each identified customer, the analysis calculated:
 
-- Number of distinct sales invoices
-- Total gross sales revenue
+- Number of distinct sales invoices.
+- Total gross sales revenue.
 
 ### Results
 
@@ -447,26 +446,44 @@ The following limitations should be considered when interpreting the results:
 
 ---
 
-## 10. Next Phase — Power BI Dashboard
+## 10. Power BI Dashboard
 
-The initial SQL analysis phase is complete.
+An interactive Power BI dashboard was developed using the cleaned transaction data stored in MySQL.
 
-The next phase will focus on building an interactive dashboard using Power BI Desktop.
+### Dashboard Components
 
-### Planned Dashboard Features
+| Component | Purpose |
+|---|---|
+| Gross Sales Revenue | Display total gross sales revenue |
+| Average Invoice Value | Show average revenue per sales invoice |
+| Total Sales Invoices | Display the number of distinct sales invoices |
+| Monthly Revenue Trend | Explore changes in monthly gross revenue |
+| Revenue by Country | Compare revenue across customer countries |
+| Top 10 StockCodes | Identify the highest-revenue product identifiers |
+| Top 10 Customers | Identify the highest-revenue identified customers |
 
-- Gross sales revenue KPI
-- Total sales invoices KPI
-- Average invoice value KPI
-- Monthly revenue trends
-- Revenue by customer country
-- Top StockCodes by gross revenue
-- Top customers by gross revenue
-- Interactive date and country filters
+### Interactive Filters
 
-The dashboard will be connected to the MySQL database and will use the cleaned transaction data.
+The dashboard includes two slicers:
 
-Product rankings will be labeled appropriately until non-merchandise codes are separated.
+- **Invoice Date:** Filter the reporting period.
+- **Country:** Explore sales performance for selected customer countries.
+
+The slicers allow users to explore different periods and customer markets. The visuals update dynamically based on the selected filters.
+
+### Dashboard Screenshot
+
+A screenshot of the completed dashboard is available in the project's `images/` directory.
+
+The Power BI report file (`.pbix`) can also be included in the repository if available.
+
+### Dashboard Interpretation
+
+The dashboard brings together the main findings from the SQL analyses.
+
+It allows users to explore sales trends, compare customer countries, and identify the StockCodes and known customers contributing the most gross sales revenue.
+
+All gross sales measures should be interpreted as SALE-only metrics, not net revenue or profit.
 
 ---
 
@@ -474,6 +491,6 @@ Product rankings will be labeled appropriately until non-merchandise codes are s
 
 All six SQL queries are maintained in:
 
-**[sql/sales_Analysis.sql](../sql/sales_Analysis.sql)**
+[`sql/sales_Analysis.sql`](../sql/sales_Analysis.sql)
 
 The SQL file contains the executable queries, while this report documents their results, methodology, business interpretations, and limitations.
